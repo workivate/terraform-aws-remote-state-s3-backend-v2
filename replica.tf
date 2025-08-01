@@ -229,6 +229,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "replica" {
     id     = "auto-archive"
     status = "Enabled"
 
+    filter {}
+
     dynamic "noncurrent_version_transition" {
       for_each = var.noncurrent_version_transitions
 
