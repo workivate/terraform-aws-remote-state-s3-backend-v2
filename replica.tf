@@ -2,9 +2,15 @@ locals {
   replication_role_count = var.iam_role_arn == null && var.enable_replication ? 1 : 0
 }
 
-data "aws_region" "replica" {
-  count    = var.enable_replication ? 1 : 0
-  provider = aws.replica
+data "aws_service" "s3" {
+  count      = var.enable_replication ? 1 : 0
+  service_id = "s3"
+}
+
+data "aws_service" "s3_replica" {
+  count      = var.enable_replication ? 1 : 0
+  service_id = "s3"
+  provider   = aws.replica
 }
 
 #---------------------------------------------------------------------------------------------------
@@ -80,7 +86,7 @@ data "aws_iam_policy_document" "replication" {
     condition {
       test     = "StringLike"
       variable = "kms:ViaService"
-      values   = ["s3.${data.aws_region.state.name}.amazonaws.com"]
+      values   = [data.aws_service.s3[0].dns_name]
     }
     condition {
       test     = "StringLike"
@@ -97,7 +103,7 @@ data "aws_iam_policy_document" "replication" {
     condition {
       test     = "StringLike"
       variable = "kms:ViaService"
-      values   = ["s3.${data.aws_region.replica[0].name}.amazonaws.com"]
+      values   = [data.aws_service.s3_replica[0].dns_name]
     }
     condition {
       test     = "StringLike"

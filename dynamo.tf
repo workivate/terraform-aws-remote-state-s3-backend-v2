@@ -34,7 +34,7 @@ resource "aws_dynamodb_table" "lock" {
   dynamic "replica" {
     for_each = var.enable_replication == true ? [1] : []
     content {
-      region_name = data.aws_region.replica[0].name
+      region_name = data.aws_service.s3_replica[0].region
       kms_key_arn = var.dynamodb_enable_server_side_encryption ? aws_kms_key.replica[0].arn : null
     }
   }
