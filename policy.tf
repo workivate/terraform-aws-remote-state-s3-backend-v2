@@ -42,19 +42,25 @@ data "aws_iam_policy_document" "terraform" {
     }
   }
 
-  statement {
-    actions   = ["kms:ListKeys"]
-    resources = ["*"]
+  dynamic "statement" {
+    for_each = local.kms_key_needed ? [1] : []
+    content {
+      actions   = ["kms:ListKeys"]
+      resources = ["*"]
+    }
   }
 
-  statement {
-    actions = [
-      "kms:Encrypt",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:GenerateDataKey"
-    ]
-    resources = [aws_kms_key.this.arn]
+  dynamic "statement" {
+    for_each = local.kms_key_needed ? [1] : []
+    content {
+      actions = [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:DescribeKey",
+        "kms:GenerateDataKey"
+      ]
+      resources = [local.kms_key.arn]
+    }
   }
 }
 
