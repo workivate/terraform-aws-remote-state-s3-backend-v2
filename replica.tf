@@ -82,7 +82,7 @@ data "aws_iam_policy_document" "replication" {
   }
   statement {
     actions   = ["kms:Decrypt"]
-    resources = [aws_kms_key.this.arn]
+    resources = [local.kms_key.arn]
     condition {
       test     = "StringLike"
       variable = "kms:ViaService"

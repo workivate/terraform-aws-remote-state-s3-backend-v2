@@ -24,7 +24,7 @@ resource "aws_dynamodb_table" "lock" {
 
   server_side_encryption {
     enabled     = var.dynamodb_enable_server_side_encryption
-    kms_key_arn = aws_kms_key.this.arn
+    kms_key_arn = local.kms_key.arn
   }
 
   point_in_time_recovery {

@@ -36,6 +36,17 @@ variable "terraform_iam_policy_add_lockfile_permissions" {
 # KMS Key for Encrypting S3 Buckets
 #---------------------------------------------------------------------------------------------------
 
+variable "s3_encryption_type" {
+  description = "The type of server-side encryption to use. Valid values are: 'AES256' and 'aws:kms'."
+  type        = string
+  default     = "aws:kms"
+
+  validation {
+    condition     = contains(["AES256", "aws:kms"], var.s3_encryption_type)
+    error_message = "encryption_type must be either 'AES256' or 'aws:kms'."
+  }
+}
+
 variable "kms_key_alias" {
   description = "The alias for the KMS key as viewed in AWS console. It will be automatically prefixed with `alias/`"
   type        = string

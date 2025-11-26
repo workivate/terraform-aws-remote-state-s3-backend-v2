@@ -6,7 +6,14 @@ locals {
 # KMS Key to Encrypt S3 Bucket
 #---------------------------------------------------------------------------------------------------
 
+locals {
+  kms_key_needed = var.s3_encryption_type == "aws:kms" || var.dynamodb_enable_server_side_encryption || var.enable_replication
+  kms_key        = local.kms_key_needed ? aws_kms_key.this[0] : null
+  kms_key_alias  = local.kms_key_needed ? aws_kms_alias.this[0] : null
+}
+
 resource "aws_kms_key" "this" {
+  count                   = local.kms_key_needed ? 1 : 0
   description             = var.kms_key_description
   deletion_window_in_days = var.kms_key_deletion_window_in_days
   enable_key_rotation     = var.kms_key_enable_key_rotation
@@ -15,8 +22,9 @@ resource "aws_kms_key" "this" {
 }
 
 resource "aws_kms_alias" "this" {
+  count         = local.kms_key_needed ? 1 : 0
   name          = "alias/${var.kms_key_alias}"
-  target_key_id = aws_kms_key.this.key_id
+  target_key_id = local.kms_key.key_id
 }
 
 #---------------------------------------------------------------------------------------------------
@@ -98,8 +106,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "state" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = "aws:kms"
-      kms_master_key_id = aws_kms_key.this.arn
+      sse_algorithm     = var.s3_encryption_type
+      kms_master_key_id = var.s3_encryption_type == "aws:kms" ? local.kms_key.arn : null
     }
   }
 }

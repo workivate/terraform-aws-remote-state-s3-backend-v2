@@ -26,3 +26,13 @@ moved {
   from = aws_dynamodb_table.lock
   to   = aws_dynamodb_table.lock[0]
 }
+
+moved {
+  from = aws_kms_key.this
+  to   = aws_kms_key.this[0]
+}
+
+moved {
+  from = aws_kms_alias.this
+  to   = aws_kms_alias.this[0]
+}
