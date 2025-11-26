@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0](https://github.com/pawelpesz/terraform-aws-remote-state-s3-backend-v2/compare/v2.0.2...v2.1.0) (2025-11-26)
+
+
+### Features
+
+* add support for SSE_S3 encryption ([717b6d7](https://github.com/pawelpesz/terraform-aws-remote-state-s3-backend-v2/commit/717b6d725538d42c59f958a7173b1d9c80efd30e))
+
+
+### Bug Fixes
+
+* add migrations for kms key and alias ([debce52](https://github.com/pawelpesz/terraform-aws-remote-state-s3-backend-v2/commit/debce52ec23e0ff2c425305ebef0fd23ed76326e))
+
 ## [2.0.2](https://github.com/pawelpesz/terraform-aws-remote-state-s3-backend-v2/compare/v2.0.1...v2.0.2) (2025-09-12)
 
 
